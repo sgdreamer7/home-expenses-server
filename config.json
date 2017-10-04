@@ -1,0 +1,9 @@
+{
+  "express": {
+    "port": 3000,
+    "secret": "home-expenses-secret"
+  },
+  "mongoose": {
+    "db": "mongodb://localhost/home-expenses"
+  }
+}
