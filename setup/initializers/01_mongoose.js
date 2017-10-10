@@ -19,6 +19,7 @@ module.exports = function () {
   });
 
   try {
+    mongoose.Promise=Promise;
     mongoose.connect(config.get('mongoose:db'),{useMongoClient: true,});
     log.info('Started connection on ' + (config.get('mongoose:db')) + ', waiting for it to open...');
   } catch (err) {
