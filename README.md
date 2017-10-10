@@ -4,4 +4,4 @@ Development start:
   npm run dev
 
 Production start:
-  export NODE_ENV=production npm start
+  npm start
