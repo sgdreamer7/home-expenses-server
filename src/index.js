@@ -5,8 +5,7 @@ const log = log4js.getLogger('index.js');
 
 app.boot(function (err) {
   if (err) throw err;
-  app.listen(config.get('express:port'), () => {
+  app.server = that.listen(config.get('express:port'), () => {
     log.info('Express web server started, listening on port', config.get('express:port'));
   });
-  return app;
 });

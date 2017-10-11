@@ -20,7 +20,8 @@
         "args": ["test/","--recursive"],
         "cwd": "${workspaceRoot}",
         "env": {
-          "DEBUG": "*"
+          "DEBUG": "*",
+          "NODE_ENV": "test"
         }
     },
     {

@@ -7,13 +7,11 @@
     "dev": "nodemon src/index.js",
     "debug": "DEBUG=* npm run dev",
     "test": "npm run mocha",
-    "mocha": "mocha test/ --recursive"
+    "mocha": "NODE_ENV=test mocha test/ --recursive"
   },
   "devDependencies": {
     "mocha": "^4.0.1",
-    "nodemon": "^1.12.1",
-    "superagent": "^3.6.3",
-    "superagent-promise": "^1.1.0"
+    "nodemon": "^1.12.1"
   },
   "dependencies": {
     "body-parser": "^1.18.2",
@@ -40,6 +38,8 @@
     "path": "^0.12.7",
     "require-tree": "^1.1.1",
     "serve-favicon": "^2.4.5",
-    "slug": "^0.9.1"
+    "slug": "^0.9.1",
+    "superagent": "^3.6.3",
+    "superagent-promise": "^1.1.0"
   }
 }

@@ -16,7 +16,7 @@ var http = require('http'),
 
 module.exports = function () {
   this.use(cors());
-  this.use(require('morgan')('dev'));
+  if (['production', 'test'].indexOf(config.get('NODE_ENV'))===-1) this.use(require('morgan')('dev'));
   this.use(bodyParser.urlencoded({ extended: false }));
   this.use(bodyParser.json());
   this.use(methodOverride());

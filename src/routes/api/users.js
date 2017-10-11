@@ -27,7 +27,9 @@ router.put('/user', auth.required, (req, res, next) => {
       if (typeof req.body.user.password !== 'undefined') user.setPassword(req.body.user.password);
       return user.save();
     })
-    .then(() => { return res.json({ user: user.toAuthJSON() }); })
+    .then((user) => {
+      return res.json({ user: user.toAuthJSON() });
+    })
     .catch(next);
 });
 
