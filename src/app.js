@@ -14,14 +14,4 @@ app.phase(bootable.initializers('src/setup/initializers/'));
 app.phase(bootableEnv('src/setup/environments/', app));
 app.phase(bootable.routes('src/routes/', app));
 
-app.boot(function (err) {
-
-  if (err) {
-    throw err
-  };
-
-  app.listen(config.get('express:port'), function () {
-    log.info('Express web server started, listening on port', config.get('express:port'));
-  });
-
-});
+module.exports = app;
