@@ -1,9 +1,8 @@
 const assert = require('assert');
 const app = require('../src/app');
-const mongoose = require('mongoose');
-const config = require('nconf');
 const log4js = require('log4js');
 const log = log4js.getLogger('index.js');
+
 const username = 'vns';
 const email = 'vns.scherbina@gmail.com';
 const password = 'lifeisgood123';
@@ -11,21 +10,14 @@ const password = 'lifeisgood123';
 describe('Home expenses server application tests', () => {
   before(function (done) {
     const that = this;
-    app.boot(function (err) {
-      if (err) throw err;
-      app.server = app.listen(config.get('express:port'), () => {
-        log.info('Express web server started, listening on port', config.get('express:port'));
-        that.agent = require('../src/agent');
-        done();
-      });
+    app.start(function () {
+      that.agent = require('../src/agent');
+      done();
     });
   });
 
   after(function (done) {
-    app.server.close(() => {
-      mongoose.connection.close();
-      done();
-    });
+    app.shutdown(done);
   });
 
   describe('User operations', () => {
