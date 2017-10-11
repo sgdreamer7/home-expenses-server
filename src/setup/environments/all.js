@@ -20,7 +20,7 @@ module.exports = function () {
   this.use(bodyParser.urlencoded({ extended: false }));
   this.use(bodyParser.json());
   this.use(methodOverride());
-  this.use(express.static(__dirname + '/public'));
+  this.use(express.static(require('path').resolve('public')));
   this.use(expressLogger);
   this.use(cookieParser());
   this.use(session({ secret: config.get('express:secret'), cookie: { maxAge: 60000 }, resave: false, saveUninitialized: false }));

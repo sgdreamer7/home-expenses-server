@@ -10,9 +10,9 @@ var log = log4js.getLogger('app.js');
 var app = bootable(express());
 
 
-app.phase(bootable.initializers('setup/initializers/'));
-app.phase(bootableEnv('setup/environments/', app));
-app.phase(bootable.routes('routes/', app));
+app.phase(bootable.initializers('src/setup/initializers/'));
+app.phase(bootableEnv('src/setup/environments/', app));
+app.phase(bootable.routes('src/routes/', app));
 
 app.boot(function (err) {
 

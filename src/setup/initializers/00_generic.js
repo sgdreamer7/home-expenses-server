@@ -5,6 +5,6 @@ var log = log4js.getLogger('00_generic.js');
 module.exports = function () {
 
   config.env();
-  config.file({ 'file': require('path').resolve('config.json') });
+  config.file({ 'file': require('path').resolve('config/config.json') });
 
 };
