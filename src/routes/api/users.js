@@ -59,4 +59,16 @@ router.post('/users', (req, res, next) => {
     .catch(next);
 });
 
+// Delete user
+router.delete('/user', auth.required, (req, res, next) => {
+  User
+    .findById(req.payload.id)
+    .then(user => {
+      if (!user) return res.sendStatus(401);
+      return user.remove();
+    })
+    .then(() => { return res.sendStatus(204); })
+    .catch(next);
+});
+
 module.exports = router;

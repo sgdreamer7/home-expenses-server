@@ -36,7 +36,9 @@ const Auth = {
   register: (username, email, password) =>
     requests.post('/users', { user: { username, email, password } }),
   save: user =>
-    requests.put('/user', { user })
+    requests.put('/user', { user }),
+  delete: user =>
+    requests.del('/user', { user })
 };
 
 const Categories = {
