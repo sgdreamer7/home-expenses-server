@@ -4,10 +4,10 @@
   "private": true,
   "scripts": {
     "start": "NODE_ENV=production node src/index.js",
-    "dev": "nodemon src/index.js",
+    "dev": "NODE_ENV=development nodemon src/index.js",
     "debug": "DEBUG=* npm run dev",
     "test": "npm run mocha",
-    "mocha": "NODE_ENV=test nyc mocha test/ --recursive"
+    "mocha": "NODE_ENV=test nyc --reporter=html --reporter=text mocha test/ --recursive"
   },
   "devDependencies": {
     "mocha": "^4.0.1",
