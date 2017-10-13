@@ -12,10 +12,9 @@ app.phase(bootableEnv('src/setup/environments/', app));
 app.phase(bootable.routes('src/routes/', app));
 
 app.start = function (done) {
-  const that = this;
-  this.boot(function (err) {
+  this.boot(err => {
     if (err) throw err;
-    that.server = that.listen(config.get('express:port'), () => {
+    this.server = this.listen(config.get('express:port'), () => {
       log.info('Express web server started, listening on port', config.get('express:port'));
       done();
     });
@@ -23,7 +22,6 @@ app.start = function (done) {
 };
 
 app.shutdown = function (done) {
-  const that = this;
   this.server.close(function () {
     mongoose.connection.close();
     done();

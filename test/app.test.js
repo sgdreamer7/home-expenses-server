@@ -9,9 +9,8 @@ const password = 'lifeisgood123';
 
 describe('Home expenses server application tests', () => {
   before(function (done) {
-    const that = this;
-    app.start(function () {
-      that.agent = require('../src/agent');
+    app.start(() => {
+      this.agent = require('../src/agent');
       done();
     });
   });
@@ -23,10 +22,9 @@ describe('Home expenses server application tests', () => {
   describe('User operations', () => {
 
     it('User login', function () {
-      const that = this;
       return this.agent.Auth.login(email, password)
         .then(res => {
-          that.token = res.user.token;
+          this.token = res.user.token;
           assert.equal(res.user.email, email, 'email');
           assert.equal(res.user.username, username, 'username');
         });
@@ -34,24 +32,22 @@ describe('Home expenses server application tests', () => {
 
     it('Get current user', function () {
       this.agent.setToken(this.token);
-      const that = this;
       return this.agent.Auth.current()
         .then(res => {
-          that.user = res.user;
+          this.user = res.user;
           assert.equal(res.user.email, email, 'email');
           assert.equal(res.user.username, username, 'username');
-          assert.equal(res.user.token, that.token, 'token');
+          assert.equal(res.user.token, this.token, 'token');
         });
     });
 
     it('Change user properties', function () {
       this.agent.setToken(this.token);
-      const that = this;
       return this.agent.Auth.save(this.user)
         .then(res => {
-          assert.equal(res.user.email, that.user.email, 'email');
-          assert.equal(res.user.username, that.user.username, 'username');
-          assert.equal(res.user.token, that.user.token, 'token');
+          assert.equal(res.user.email, this.user.email, 'email');
+          assert.equal(res.user.username, this.user.username, 'username');
+          assert.equal(res.user.token, this.user.token, 'token');
         });
     });
 
