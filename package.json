@@ -7,11 +7,12 @@
     "dev": "nodemon src/index.js",
     "debug": "DEBUG=* npm run dev",
     "test": "npm run mocha",
-    "mocha": "NODE_ENV=test mocha test/ --recursive"
+    "mocha": "NODE_ENV=test nyc mocha test/ --recursive"
   },
   "devDependencies": {
     "mocha": "^4.0.1",
-    "nodemon": "^1.12.1"
+    "nodemon": "^1.12.1",
+    "nyc": "^11.2.1"
   },
   "dependencies": {
     "body-parser": "^1.18.2",
