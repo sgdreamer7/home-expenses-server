@@ -15,9 +15,13 @@ var http = require('http'),
   config = require('nconf');
 
 module.exports = function () {
-  const logFormat = { 'production': 'tiny', 'test': 'tiny', 'development': 'dev' };
+  const logFormat = {
+    'development': 'dev',
+    'test': function (tokens, req, res) { return undefined },
+    'production': 'tiny'
+  };
   this.use(cors());
-  this.use(require('morgan')(logFormat[config.get('NODE_ENV')]));
+  this.use(require('morgan')(logFormat[process.env.NODE_ENV]));
   this.use(bodyParser.urlencoded({ extended: false }));
   this.use(bodyParser.json());
   this.use(methodOverride());

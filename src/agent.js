@@ -50,15 +50,22 @@ const Categories = {
     requests.post(`/categories`, { category: { title: title } }),
   update: (slug, title) =>
     requests.put(`/categories/${slug}`, { category: { title: title } }),
-  update: (slug, title) =>
+  delete: (slug) =>
     requests.del(`/categories/${slug}`),
   addSubcategory: (category, subcategory) =>
     requests.post(`/categories/${category}/subcategories/${subcategory}`),
   removeSubcategory: (category, subcategory) =>
     requests.del(`/categories/${category}/subcategories/${subcategory}`)
 };
+
+const WrongAPI = {
+  wrong: () =>
+    requests.get('/non-exsisting-path')
+};
+
 module.exports = {
   Auth,
   Categories,
-  setToken: _token => { token = _token; }
+  setToken: _token => { token = _token; },
+  WrongAPI
 };

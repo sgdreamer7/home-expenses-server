@@ -1,7 +1,6 @@
 module.exports = function () {
 
   var config = require('nconf');
-  var isProduction = config.get('NODE_ENV') === 'production';
 
   this.use('/api', require('./api'));
 
@@ -11,27 +10,18 @@ module.exports = function () {
     next(err);
   });
 
-  if (!isProduction) {
-    this.use(function (err, req, res, next) {
-      console.log(err.stack);
-
-      res.status(err.status || 500);
-
-      res.json({
-        'errors': {
-          message: err.message,
-          error: err
-        }
-      });
-    });
-  }
-
   this.use(function (err, req, res, next) {
-    res.status(err.status || 500);
+    const logFun = {
+      'development': console.log,
+      'test': function (err) { },
+      'production': function (err) { }
+    };
+    logFun[process.env.NODE_ENV](err.stack);
+    res.status(err.status);
     res.json({
       'errors': {
         message: err.message,
-        error: {}
+        error: err
       }
     });
   });

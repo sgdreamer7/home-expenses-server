@@ -14,7 +14,6 @@ CategorySchema.plugin(uniqueValidator, { message: 'is already taken' });
 
 CategorySchema.pre('validate', function (next) {
   if (!this.slug) { this.slugify(); }
-  if (!this.subcategories) { this.subcategories = []; }
   next();
 });
 
@@ -25,8 +24,7 @@ CategorySchema.methods.populatePromised = function () {
     this
       .populate('subcategories')
       .execPopulate()
-      .then(c => { resolve(c); })
-      .catch(err => reject(err));
+      .then(c => { resolve(c); });
   });
 };
 
@@ -36,15 +34,18 @@ CategorySchema.methods.toJSONPopulatedPromised = function () {
       .populate('subcategories')
       .execPopulate()
       .then(category => {
-        resolve({
-          slug: category.slug,
-          title: category.title,
-          subcategories: category.subcategories,
-          createdAt: category.createdAt,
-          updatedAt: category.updatedAt
+        Promise.all(category.subcategories.map(subcategory => {
+          return subcategory.toJSONPopulatedPromised()
+        })).then(subcategories => {
+          resolve({
+            slug: category.slug,
+            title: category.title,
+            subcategories: subcategories,
+            createdAt: category.createdAt,
+            updatedAt: category.updatedAt
+          });
         });
-      })
-      .catch(err => reject(err));
+      });
   })
 };
 

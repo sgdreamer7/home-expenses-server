@@ -9,7 +9,11 @@ router.param('category', (req, res, next, slug) => {
   Category
     .findOne({ slug: slug })
     .then(category => {
-      if (!category) return res.sendStatus(404);
+      if (!category) {
+        var err = new Error('Not Found');
+        err.status = 404;
+        next(err);
+      }
       req.category = category;
       return next();
     })
@@ -20,16 +24,20 @@ router.param('category', (req, res, next, slug) => {
 router.param('subcategory', (req, res, next, slug) => {
   Category
     .findOne({ slug: slug })
-    .then(category => {
-      if (!category) return res.sendStatus(404);
-      req.subcategory = category;
+    .then(subcategory => {
+      if (!subcategory) {
+        var err = new Error('Not Found');
+        err.status = 404;
+        next(err);
+      };
+      req.subcategory = subcategory;
       return next();
     })
     .catch(next);
 });
 
 // Get all categories
-router.get('/', auth.optional, (req, res, next) => {
+router.get('/', auth.required, (req, res, next) => {
   const query = {};
   Category
     .find(query)
@@ -54,7 +62,7 @@ router.post('/', auth.required, (req, res, next) => {
 });
 
 // Get selected category
-router.get('/:category', auth.optional, (req, res, next) => {
+router.get('/:category', auth.required, (req, res, next) => {
   req.category
     .toJSONPopulatedPromised()
     .then(category => { return res.json({ category: category }); })
@@ -103,7 +111,7 @@ router.post('/:category/subcategories/:subcategory', auth.required, (req, res, n
           .then(category => { return res.json({ category: category }); })
           .catch(next)
       }
-      return category
+      return c
         .toJSONPopulatedPromised()
         .then(category => { return res.json({ category: category }); })
         .catch(next);

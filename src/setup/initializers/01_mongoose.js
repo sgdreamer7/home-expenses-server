@@ -5,7 +5,7 @@ var config = require('nconf');
 var mongoose = require('mongoose');
 var requireTree = require('require-tree');
 
-var models = requireTree('../../models/');
+requireTree('../../models/');
 
 module.exports = function () {
 
@@ -19,11 +19,12 @@ module.exports = function () {
   });
 
   try {
-    mongoose.Promise=Promise;
-    mongoose.connect(config.get('mongoose:db'),{useMongoClient: true,});
+    mongoose.Promise = Promise;
+    mongoose.connect(config.get('mongoose:db'), { useMongoClient: true, });
     log.info('Started connection on ' + (config.get('mongoose:db')) + ', waiting for it to open...');
   } catch (err) {
     log.error('Failed to connect to ' + (config.get('mongoose:db')), err.message);
+    throw new Error('mongoose: Failed to connect to ' + (config.get('mongoose:db')) + ': ' + err.message);
   }
 
 };
