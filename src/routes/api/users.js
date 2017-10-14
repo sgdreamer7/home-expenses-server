@@ -9,11 +9,7 @@ router.get('/user', auth.required, (req, res, next) => {
   User
     .findById(req.payload.id)
     .then(user => {
-      if (!user) {
-        var err = new Error('Not Found');
-        err.status = 404;
-        next(err);
-      };
+      if (!user) return res.sendStatus(401);
       return res.json({ user: user.toAuthJSON() });
     })
     .catch(next);
@@ -24,11 +20,7 @@ router.put('/user', auth.required, (req, res, next) => {
   User
     .findById(req.payload.id)
     .then(user => {
-      if (!user) {
-        var err = new Error('Unauthorized');
-        err.status = 401;
-        next(err);
-      };
+      if (!user) return res.sendStatus(401);
       if (typeof req.body.user.username !== 'undefined') user.username = req.body.user.username;
       if (typeof req.body.user.email !== 'undefined') user.email = req.body.user.email;
       if (typeof req.body.user.password !== 'undefined') user.setPassword(req.body.user.password);
@@ -71,11 +63,7 @@ router.delete('/user', auth.required, (req, res, next) => {
   User
     .findById(req.payload.id)
     .then(user => {
-      if (!user) {
-        var err = new Error('Unauthorized');
-        err.status = 401;
-        next(err);
-      };
+      if (!user) return res.sendStatus(401);
       auth.logout(req.payload);
       return user.remove();
     })

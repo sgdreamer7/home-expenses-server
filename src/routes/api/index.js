@@ -10,16 +10,6 @@ router.use(function (err, req, res, next) {
     'production': function (err) { }
   };
   logFun[process.env.NODE_ENV](err);
-  if (err.name === 'ValidationError') {
-    return res.status(422).json({
-      errors: Object.keys(err.errors).reduce(function (errors, key) {
-        errors[key] = err.errors[key].message;
-
-        return errors;
-      }, {})
-    });
-  }
-
   return next(err);
 });
 

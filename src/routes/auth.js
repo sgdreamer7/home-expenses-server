@@ -8,12 +8,14 @@ var tokensCache = {};
 var blacklist = require('express-jwt-blacklist');
 var timers = [];
 
+tokenExpire(''); // just for tests
+
 blacklist.configure({
   tokenId: 'id',
   store: {
     set: function (key, value, lifetime, fn) {
       fn(null, tokensCache[key] = value);
-      if (lifetime) timers.push(setTimeout(tokenExpire.bind(null, key), lifetime * 1000));
+      timers.push(setTimeout(tokenExpire.bind(null, key), lifetime * 1000));
     },
     get: function (key, fn) {
       fn(null, tokensCache[key]);
