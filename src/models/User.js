@@ -9,7 +9,6 @@ var secret = config.get('express:secret');
 var UserSchema = new mongoose.Schema({
   username: { type: String, lowercase: true, unique: true, required: [true, "can't be blank"], match: [/^[a-zA-Z0-9]+$/, 'is invalid'], index: true },
   email: { type: String, lowercase: true, unique: true, required: [true, "can't be blank"], match: [/\S+@\S+\.\S+/, 'is invalid'], index: true },
-  image: String,
   hash: String,
   salt: String
 }, { timestamps: true });
@@ -42,8 +41,7 @@ UserSchema.methods.toAuthJSON = function () {
   return {
     username: this.username,
     email: this.email,
-    token: this.generateJWT(),
-    image: this.image
+    token: this.generateJWT()
   };
 };
 

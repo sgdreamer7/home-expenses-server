@@ -50,6 +50,18 @@ describe('Home expenses server application tests', () => {
         .catch(err => {
           assert.equal(err.response.statusCode, 422, 'invalid email or password');
           assert.equal(err.response.body.errors['email or password'], 'is invalid', 'invalid email or password');
+        })
+        .then(res => this.agent.Auth.login('', password))
+        .then(res => { })
+        .catch(err => {
+          assert.equal(err.response.statusCode, 422, 'invalid email');
+          assert.equal(err.response.body.errors.email, 'can\'t be blank', 'invalid email');
+        })
+        .then(res => this.agent.Auth.login(email, ''))
+        .then(res => { })
+        .catch(err => {
+          assert.equal(err.response.statusCode, 422, 'invalid password');
+          assert.equal(err.response.body.errors.password, 'can\'t be blank', 'invalid password');
         });
     });
 
@@ -88,11 +100,13 @@ describe('Home expenses server application tests', () => {
     });
 
     it('Change user properties', function () {
+      this.user.password = password;
       return this.agent.Auth.save(this.user)
         .then(res => {
           assert.equal(res.user.email, this.user.email, 'email');
           assert.equal(res.user.username, this.user.username, 'username');
-          assert.equal(res.user.token, this.user.token, 'token');
+          this.token = res.user.token;
+          this.agent.setToken(this.token);
         });
     });
 
