@@ -6,13 +6,14 @@ var secret = config.get('express:secret');
 var jwt = require('express-jwt');
 var tokensCache = {};
 var blacklist = require('express-jwt-blacklist');
+var timers = [];
 
 blacklist.configure({
   tokenId: 'id',
   store: {
     set: function (key, value, lifetime, fn) {
       fn(null, tokensCache[key] = value);
-      if (lifetime) setTimeout(tokenExpire.bind(null, key), lifetime * 1000);
+      if (lifetime) timers.push(setTimeout(tokenExpire.bind(null, key), lifetime * 1000));
     },
     get: function (key, fn) {
       fn(null, tokensCache[key]);
@@ -42,8 +43,9 @@ var auth = {
     getToken: getTokenFromHeader,
     isRevoked: blacklist.isRevoked
   }),
-  logout: function (user) {
-    blacklist.revoke(user);
+  logout: function (user) { blacklist.revoke(user); },
+  clearTimers: function () {
+    timers.forEach(timer => timer.unref());
   }
 };
 

@@ -5,7 +5,9 @@ const config = require('nconf');
 const mongoose = require('mongoose');
 const log4js = require('log4js');
 const log = log4js.getLogger('app.js');
+
 const app = bootable(express());
+
 
 app.phase(bootable.initializers('src/setup/initializers/'));
 app.phase(bootableEnv('src/setup/environments/', app));
@@ -24,6 +26,7 @@ app.start = function (done) {
 app.shutdown = function (done) {
   this.server.close(function () {
     mongoose.connection.close();
+    require('./routes/auth').clearTimers();
     done();
   });
 };
