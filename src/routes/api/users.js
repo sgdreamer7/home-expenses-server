@@ -32,8 +32,20 @@ router.put('/user', auth.required, (req, res, next) => {
     .catch(next);
 });
 
+// Logout current user
+router.get('/user/logout', auth.required, (req, res, next) => {
+  User
+    .findById(req.payload.id)
+    .then(user => {
+      if (!user) return res.sendStatus(401);
+      auth.logout(req.payload);
+      return res.json({ user: { username: req.payload.username } });
+    })
+    .catch(next);
+});
+
 // Login user
-router.post('/users/login', auth.optional, (req, res, next) => {
+router.post('/users/login', (req, res, next) => {
   if (!req.body.user.email) return res.status(422).json({ errors: { email: "can't be blank" } });
   if (!req.body.user.password) return res.status(422).json({ errors: { password: "can't be blank" } });
   passport.authenticate('local', { session: false }, (err, user, info) => {

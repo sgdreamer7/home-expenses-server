@@ -75,8 +75,7 @@ describe('Home expenses server application tests', () => {
         .then(res => {
           assert.equal(res.user.email, email2, 'email2');
           assert.equal(res.user.username, username2, 'username2');
-        })
-        .catch(err => console.log(err));
+        });
     });
 
     it('Login user', function () {
@@ -110,8 +109,26 @@ describe('Home expenses server application tests', () => {
         });
     });
 
+    it('Logout current user', function () {
+      this.user.password = password;
+      return this.agent.Auth.logout()
+        .then(res => {
+          assert.equal(res.user.username, username, 'username');
+        });
+    });
+
     it('Delete user', function () {
-      return this.agent.Auth.delete(this.user)
+      return wait(2000)
+        .then(res =>
+          this.agent.Auth.login(email, password))
+        .then(res => {
+          this.token = res.user.token;
+          this.user = res.user;
+          this.agent.setToken(this.token);
+          assert.equal(res.user.email, email, 'email after login');
+          assert.equal(res.user.username, username, 'username after login');
+        })
+        .then(res => this.agent.Auth.delete(this.user))
         .then(res => {
           assert.equal(res.toString(), ({}).toString(), 'No response for user removal');
           this.token = undefined;
@@ -129,7 +146,6 @@ describe('Home expenses server application tests', () => {
     });
 
   });
-
 
   describe('Categories operations', () => {
 
@@ -275,3 +291,11 @@ describe('Home expenses server application tests', () => {
 
   });
 });
+
+
+function wait(ms) {
+  const p = new Promise(function (resolve, reject) {
+    setTimeout(function () { resolve(); }, ms);
+  });
+  return p;
+}
